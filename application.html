@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>University Application Request</title>
+</head>
+<style>
+  body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  background-color: #ffffff;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #3498db;
+  padding: 15px 30px;
+  color: white;
+}
+
+header h1 {
+  margin: 0;
+}
+
+header button {
+  background-color: #c0392b;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+}
+
+main {
+  max-width: 750px;
+  margin: 50px auto;
+  padding: 25px;
+  background-color: #f1f1f1;
+  border-radius: 10px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input, textarea {
+  font-family: "Comic Sans MS", sans-serif;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button[type="submit"] {
+  font-family: "Comic Sans MS", sans-serif;
+  background-color: #4cafaa;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+</style>
+<body>
+<header>
+  <h1>University Applications</h1>
+  <button onclick="logout()">Logout</button>
+</header>
+
+<main>
+  <form id="applicationForm">
+    <input type="text" id="fullName" placeholder="Full Name" required>
+    <input type="text" id="email" placeholder="Email" required>
+    <input type="text" id="phone" placeholder="Phone Number" required>
+    <input type="text" id="degree" placeholder="Degree / Program" required>
+    <input type="text" id="university" placeholder="Preferred Universities" required>
+    <button type="submit">Submit Application Request</button>
+  </form>
+</main>
+
+<script>
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  if(!currentUser){ alert("Please log in first."); window.location.href="login.html"; }
+
+  function logout() {
+    localStorage.removeItem("currentUser");
+    window.location.href = "login.html";
+  }
+
+  const appForm = document.getElementById("applicationForm");
+  appForm.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const appRequest = {
+      user: currentUser.username,
+      service: "University Applications",
+      fullName: document.getElementById("fullName").value,
+      email: document.getElementById("email").value,
+      phone: document.getElementById("phone").value,
+      degree: document.getElementById("degree").value,
+      universities: document.getElementById("university").value,
+      requestedAt: new Date().toLocaleString()
+    };
+
+    let serviceRequests = JSON.parse(localStorage.getItem("serviceRequests")) || [];
+    serviceRequests.push(appRequest);
+    localStorage.setItem("serviceRequests", JSON.stringify(serviceRequests));
+
+    alert("✅ Your University Application request has been submitted!");
+    window.location.href = "dashboard.html";
+  });
+</script>
+
+</body>
+</html>

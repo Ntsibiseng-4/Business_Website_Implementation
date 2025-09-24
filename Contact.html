@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - TakeItEasy Internet Cafe</title>
+  <style>
+    body{ 
+      font-family: 'Comic Sans MS', sans-serif; 
+      margin: 0; 
+      padding: 0; 
+      background: #fafafa; 
+    }
+
+    header{ 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8f8f8; 
+      padding: 15px; 
+      text-align: right; 
+    }
+
+    header a{ 
+      margin: 0 10px; 
+      text-decoration: none; 
+      color: black; 
+      font-weight: bold; 
+    }
+
+    h1{ 
+      text-align: center; 
+      margin: 20px 0; 
+    }
+    
+    .contact-container { 
+      display: flex; 
+      justify-content: center; 
+      gap: 40px; 
+      max-width: 1000px; 
+      margin: 30px auto; 
+      padding: 20px;
+    }
+
+    /* Contact form */
+    .contact-form{ 
+      flex: 1; 
+      background: #fff; 
+      padding: 20px; 
+      border-radius: 10px; 
+      box-shadow: 0 0 8px rgba(0,0,0,0.1); 
+    }
+
+    .contact-form input, 
+    .contact-form textarea{ 
+      font-family: 'Comic Sans MS', sans-serif;
+      display: block; 
+      width: 95%; 
+      padding: 8px; 
+      margin: 8px 0; 
+      font-size: 14px; 
+    }
+    .contact-form textarea{ 
+      resize: none; 
+    }
+    
+    .contact-form button{ 
+      font-family: 'Comic Sans MS', sans-serif;
+      width: 100%; 
+      padding: 10px; 
+      background: black; 
+      color: white; 
+      border: none; 
+      cursor: pointer; 
+      font-size: 15px;
+      border-radius: 5px;
+    }
+
+    /* Contact details */
+    .contact-info{ 
+      flex: 1; 
+      background: #fff; 
+      padding: 20px; 
+      border-radius: 10px; 
+      box-shadow: 0 0 8px rgba(0,0,0,0.1); 
+    }
+
+    .contact-info h2{ 
+      margin-bottom: 15px; 
+    }
+
+    .contact-info p{ 
+      margin: 8px 0; 
+      font-size: 15px; 
+    }
+
+    /* Social media */
+    .socials{ 
+      margin-top: 15px; 
+    }
+
+    .socials a{ 
+      margin: 0 8px; 
+      display: inline-block; 
+    }
+
+    .socials img{ 
+      width: 28px; 
+      height: 28px; 
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html">Home</a>
+    <a href="login.html">Login/SignUp</a>
+    <a href="services.html">Services</a>
+    <a href="feedback.html">Feedback</a>
+  </header>
+
+  <h1>Contact Us</h1>
+
+  <div class="contact-container">
+    <!-- Contact Form -->
+    <div class="contact-form">
+      <form>
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <textarea rows="4" placeholder="Your Message"></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </div>
+
+    <!-- Business Info -->
+    <div class="contact-info">
+      <h2>Our Office</h2>
+      <p><strong>Address:</strong> University Of venda Cafeteria, Thohoyandou, Limpopo, South Africa</p>
+      <p><strong>Phone:</strong> +27 12 345 6789</p>
+      <p><strong>Email:</strong> info@techiteasycafe.co.za</p>
+
+      <div class="socials">
+        <h3>Follow Us</h3>
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/174/174848.png" alt="Facebook"></a>
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733635.png" alt="Twitter"></a>
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"></a>
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn"></a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

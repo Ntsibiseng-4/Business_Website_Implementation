@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV Request</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<style>
+   body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #ffffff;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #3498db;
+  padding: 15px 30px;
+  color: white;
+}
+
+header h1 {
+  margin: 0;
+}
+
+header button {
+  background-color: #e74c3c;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+main {
+  max-width: 700px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #f1f1f1;
+  border-radius: 10px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input, textarea {
+  font-family: "Comic Sans MS", sans-serif;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button[type="submit"] {
+  font-family: "Comic Sans MS", sans-serif;
+  background-color: #4cafaa;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+ 
+</style>
+<body>
+<header>
+  <h1>CV Request</h1>
+  <button onclick="logout()">Logout</button>
+</header>
+
+<main>
+  <form id="cvForm">
+    <input type="text" id="fullName" placeholder="Full Name" required>
+    <input type="text" id="email" placeholder="Email" required>
+    <input type="text" id="phone" placeholder="Phone Number" required>
+    <input type="text" id="education" placeholder="Highest Education" required>
+    <textarea id="experience" placeholder="Work Experience" required></textarea>
+    <textarea id="skills" placeholder="Skills" required></textarea>
+    <button type="submit">Submit CV Request</button>
+  </form>
+</main>
+
+<script>
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  if (!currentUser) {
+      alert("Please log in first.");
+      window.location.href = "login.html";
+  }
+
+  function logout() {
+      localStorage.removeItem("currentUser");
+      window.location.href = "login.html";
+  }
+
+  const cvForm = document.getElementById("cvForm");
+  cvForm.addEventListener("submit", function(e){
+      e.preventDefault();
+
+      const cvRequest = {
+          user: currentUser.username,
+          service: "CV Poster",
+          fullName: document.getElementById("fullName").value,
+          email: document.getElementById("email").value,
+          phone: document.getElementById("phone").value,
+          education: document.getElementById("education").value,
+          experience: document.getElementById("experience").value,
+          skills: document.getElementById("skills").value,
+          requestedAt: new Date().toLocaleString()
+      };
+
+      let serviceRequests = JSON.parse(localStorage.getItem("serviceRequests")) || [];
+      serviceRequests.push(cvRequest);
+      localStorage.setItem("serviceRequests", JSON.stringify(serviceRequests));
+
+      alert("✅ Your CV request has been submitted!");
+      window.location.href = "dashboard.html";
+  });
+</script>
+
+</body>
+</html>

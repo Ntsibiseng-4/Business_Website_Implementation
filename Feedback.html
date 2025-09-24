@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feedback - TakeItEasy Internet Cafe</title>
+    <style>
+      body {
+        font-family: "Comic Sans MS", sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #fafafa;
+      }
+
+      header {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f8f8f8;
+        padding: 15px;
+        text-align: right;
+      }
+
+      header a {
+        margin: 0 10px;
+        text-decoration: none;
+        color: black;
+        font-weight: bold;
+      }
+
+      h1 {
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .feedback {
+        max-width: 500px;
+        margin: 30px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .feedback input,
+      .feedback textarea {
+        font-family: "Comic Sans MS", sans-serif;
+        display: block;
+        width: 95%;
+        padding: 8px;
+        margin: 8px 0;
+        font-size: 14px;
+      }
+
+      .feedback textarea {
+        resize: none;
+      }
+
+      .feedback button {
+        font-family: "Comic Sans MS", sans-serif;
+        width: 100%;
+        padding: 10px;
+        background: black;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 15px;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="index.html">Home</a>
+      <a href="Login.html">Login/SignUp</a>
+      <a href="Services.html">Services</a>
+      <a href="Contact.html">Contact</a>
+    </header>
+
+    <h1>Feedback</h1>
+    <div class="feedback">
+      <form>
+        <input type="text" placeholder="Your Name" required />
+        <input type="email" placeholder="Your Email" required />
+        <textarea rows="5" placeholder="Your Feedback"></textarea>
+        <button type="submit">Submit Feedback</button>
+      </form>
+    </div>
+  </body>
+</html>

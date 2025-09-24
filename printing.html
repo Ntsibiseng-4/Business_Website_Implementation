@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=home" />
+  <title>Printing Request</title>
+</head>
+<style>
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
+
+  body {
+  font-family: Verdana, sans-serif;
+  margin: 0;
+  background-color: #ffffff;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #3498db;
+  padding: 15px 30px;
+  color: white;
+}
+
+.header-right a {
+  border: none;
+  padding: 5px 10px;
+  color: #2980b9;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.3s;
+  background-color: #f1f1f1;
+  i
+}
+
+.header-right a:hover {
+  background-color: #1f5c8b;
+}
+
+header h1 {
+  margin: 0;
+}
+
+header button {
+  background-color: #c0392b;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+main {
+  max-width: 750px;
+  margin: 50px auto;
+  padding: 25px;
+  background-color: #f1f1f1;
+  border-radius: 10px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+input, textarea {
+  font-family: "Comic Sans MS", sans-serif;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+}
+
+button[type="submit"] {
+  font-family: "Comic Sans MS", sans-serif;
+  background-color: #4cafaa;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+input[type="file"] {
+  background: #fff;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+</style>
+<body>
+<header>
+  <h1>Printing Request</h1>
+       <div class="header-right">
+    <a href="index.html"> <span class="material-symbols-outlined">
+home
+</span></a>
+  <button onclick="goBack()">Back to Dashboard</button>
+</header>
+
+<main>
+  <form id="printingForm">
+    <input type="text" id="documentName" placeholder="Document Name" required>
+    <input type="number" id="numPages" placeholder="Number of Pages" required>
+    <label for="colorOption">Color Option:</label>
+    <select id="colorOption" required>
+      <option value="Black & White">Black & White</option>
+      <option value="Color">Color</option>
+    </select>
+    <label for="deliveryOption">Receive Method:</label>
+    <select id="deliveryOption" name="deliveryOption" required>
+      <option value="Deliver">Delivery</option>
+      <option value="Collect">Collection</option>
+    </select>
+     <label for="cvFile">Upload Your CV Document (PDF, DOCX):</label>
+    <input type="file" id="cvFile" name="cvFile" accept=".pdf,.doc,.docx" required>
+    <textarea id="instructions" placeholder="Additional Instructions"></textarea>
+    <button type="submit">Submit Printing Request</button>
+  </form>
+</main>
+
+<script>
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  if (!currentUser) {
+      alert("Please log in first.");
+      window.location.href = "login.html";
+  }
+
+  function logout() {
+      localStorage.removeItem("currentUser");
+      window.location.href = "login.html";
+  }
+
+  
+    function goBack() {
+    window.location.href = "dashboard.html";
+  }
+
+  const printingForm = document.getElementById("printingForm");
+  printingForm.addEventListener("submit", function(e){
+      e.preventDefault();
+
+      const fileInput = document.getElementById("cvFile");
+      const file = fileInput.files[0];
+
+       if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const fileContent = event.target.result;  //Base64 file data
+
+      const printingRequest = {
+          user: currentUser.username,
+          service: "Printing",
+          documentName: document.getElementById("documentName").value,
+          numPages: document.getElementById("numPages").value,
+          colorOption: document.getElementById("colorOption").value,
+          instructions: document.getElementById("instructions").value,
+          deliveryOption: document.getElementById("deliveryOption").value,
+          fileData: fileContent, //Store Base64 content
+          fileNmae: file.name,
+          requestedAt: new Date().toLocaleString()
+      };
+
+      let serviceRequests = JSON.parse(localStorage.getItem("serviceRequests")) || [];
+      serviceRequests.push(printingRequest);
+      localStorage.setItem("serviceRequests", JSON.stringify(serviceRequests));
+
+      alert("✅ Your Printing request has been submitted!");
+      window.location.href = "dashboard.html";
+  };
+
+     reader.readAsDataURL(file); // Convert file to Base64
+    } else {
+        alert("Please upload a document.");
+    }
+
+    // window.location.href = "payment.html";
+    //A database to store what the user request of
+  });
+</script>
+
+</body>
+</html>
