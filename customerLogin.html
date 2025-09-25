@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login/Singup - TakeItEasy Internet Cafe</title>
+  <title>Customer Login/Singup - TakeItEasy Internet Cafe</title>
   <style>
     
 
@@ -84,6 +84,15 @@
     background-color: #45a049;
 }
 
+.error-message {
+  display: none;
+  color: red;
+  font-size: 14px;
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+
 .form-footer {
     text-align: center;
     font-size: 14px;
@@ -93,30 +102,20 @@
   </style>
 </head>
 <body>
-
-<div class="form-container">
-  <h1>Login/SignUp</h1>
-  <form id="loginForm">
-    <div class="role-options">
-    <label>
-      <input type="radio" name="role" value="customer" checked> Customer
-    </label>
-    <label>
-      <input type="radio" name="role" value="admin"> Admin
-    </label>
+ <div class="form-container">
+    <h1>Customer Login</h1>
+    <form id="loginForm">
+      <input type="text" id="loginUsername" placeholder="Username or Email" required>
+      <input type="password" id="loginPassword" placeholder="Password" required>
+      <button type="submit">Login</button>
+      <p id="loginErrorMsg" class="error-message"></p>
+    </form>
+    <div class="form-footer">
+      Don’t have an account? <a href="signup.html">Sign Up</a>
+    </div>
   </div>
 
-    <input type="text" id="loginUsername" placeholder="Email" required>
-    <input type="password" id="loginPassword" placeholder="Password" required>
-    <button type="submit">Login</button>
-  </form>
-  <div class="form-footer">
-    Don't have an account? <a href="signup.html">Sign Up</a>
-  </div>
-</div>
-
-
-  <script src="login.js"></script>
+  <script src="customerLogin.js"></script>
 
 </body>
 </html>

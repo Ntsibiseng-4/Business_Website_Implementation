@@ -1,125 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>University Application Request</title>
-</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>University Applications</title>
 <style>
-  body {
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  background-color: #ffffff;
+body {
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+    margin: 0;
+    padding: 0;
 }
 
 header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #3498db;
-  padding: 15px 30px;
-  color: white;
-}
-
-header h1 {
-  margin: 0;
-}
-
-header button {
-  background-color: #c0392b;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  color: white;
+    background: #3498db;
+    color: white;
+    padding: 15px;
+    text-align: center;
 }
 
 main {
-  max-width: 750px;
-  margin: 50px auto;
-  padding: 25px;
-  background-color: #f1f1f1;
-  border-radius: 10px;
+    max-width: 700px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+form input,
+form select,
+form textarea,
+form button {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+     font-family: "Comic Sans MS", sans-serif;
 }
 
-input, textarea {
-  font-family: "Comic Sans MS", sans-serif;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+form button {
+    background: #3498db;
+    color: white;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
 }
 
-button[type="submit"] {
-  font-family: "Comic Sans MS", sans-serif;
-  background-color: #4cafaa;
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 6px;
-  cursor: pointer;
+form button:hover {
+    background: #2980b9;
 }
-
-button:hover {
-    background-color: #45a049;
-}
-
 </style>
+</head>
 <body>
+
 <header>
-  <h1>University Applications</h1>
-  <button onclick="logout()">Logout</button>
+    <h1>University Applications Request</h1>
 </header>
 
 <main>
-  <form id="applicationForm">
+<form id="applicationForm">
     <input type="text" id="fullName" placeholder="Full Name" required>
     <input type="text" id="email" placeholder="Email" required>
     <input type="text" id="phone" placeholder="Phone Number" required>
     <input type="text" id="degree" placeholder="Degree / Program" required>
     <input type="text" id="university" placeholder="Preferred Universities" required>
+
+    <label for="cvFile">Upload Supporting Documents (PDF, DOCX):</label>
+    <input type="file" id="cvFile" accept=".pdf,.doc,.docx">
+
+    <label for="instructions">Additional Instructions:</label>
+    <textarea id="instructions" placeholder="Additional Instructions"></textarea>
+
+    <label for="receivingMethod">Receiving Method:</label>
+    <select id="receivingMethod" required>
+        <option value="Online">Online</option>
+        <option value="Contact">Contact</option>
+    </select>
+
+    <input type="text" id="contact" placeholder="Your Contact" required>
+
     <button type="submit">Submit Application Request</button>
-  </form>
+</form>
 </main>
 
 <script>
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  if(!currentUser){ alert("Please log in first."); window.location.href="login.html"; }
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+if(!currentUser){ 
+    alert("Please log in first."); 
+    window.location.href="customerLogin.html"; 
+}
 
-  function logout() {
-    localStorage.removeItem("currentUser");
-    window.location.href = "login.html";
-  }
-
-  const appForm = document.getElementById("applicationForm");
-  appForm.addEventListener("submit", function(e){
+const appForm = document.getElementById("applicationForm");
+appForm.addEventListener("submit", function(e){
     e.preventDefault();
 
-    const appRequest = {
-      user: currentUser.username,
-      service: "University Applications",
-      fullName: document.getElementById("fullName").value,
-      email: document.getElementById("email").value,
-      phone: document.getElementById("phone").value,
-      degree: document.getElementById("degree").value,
-      universities: document.getElementById("university").value,
-      requestedAt: new Date().toLocaleString()
-    };
+    const fileInput = document.getElementById("cvFile");
+    const file = fileInput.files[0];
 
-    let serviceRequests = JSON.parse(localStorage.getItem("serviceRequests")) || [];
-    serviceRequests.push(appRequest);
-    localStorage.setItem("serviceRequests", JSON.stringify(serviceRequests));
+    let fileContent = null;
+    if(file){
+        const reader = new FileReader();
+        reader.onload = function(event){
+            fileContent = event.target.result;
+            saveRequest(fileContent);
+        };
+        reader.readAsDataURL(file);
+    } else {
+        saveRequest(fileContent);
+    }
 
-    alert("✅ Your University Application request has been submitted!");
-    window.location.href = "dashboard.html";
-  });
+    function saveRequest(fileContent){
+        const appRequest = {
+            username: currentUser.username,
+            service: "University Applications",
+            fullName: document.getElementById("fullName").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            degree: document.getElementById("degree").value,
+            universities: document.getElementById("university").value,
+            documentName: file ? file.name : null,
+            documentData: fileContent,
+            instructions: document.getElementById("instructions").value,
+            receivingMethod: document.getElementById("receivingMethod").value,
+            contact: document.getElementById("contact").value,
+            requestedAt: new Date().toLocaleString()
+        };
+
+        let serviceRequests = JSON.parse(localStorage.getItem("serviceRequests")) || [];
+        serviceRequests.push(appRequest);
+        localStorage.setItem("serviceRequests", JSON.stringify(serviceRequests));
+
+        alert("✅ Your University Application request has been submitted!");
+        window.location.href = "dashboard.html";
+    }
+});
 </script>
-
 </body>
 </html>

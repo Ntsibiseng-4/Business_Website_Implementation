@@ -1,197 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=home" />
-  <title>Printing Request</title>
-</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Printing Service</title>
 <style>
-.material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 24
+body {
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+    margin: 0;
+    padding: 0;
 }
-
-
-  body {
-  font-family: Verdana, sans-serif;
-  margin: 0;
-  background-color: #ffffff;
-}
-
 header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #3498db;
-  padding: 15px 30px;
-  color: white;
+    background: #3498db;
+    color: white;
+    padding: 15px;
+    text-align: center;
 }
-
-.header-right a {
-  border: none;
-  padding: 5px 10px;
-  color: #2980b9;
-  font-weight: bold;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: 0.3s;
-  background-color: #f1f1f1;
-  i
-}
-
-.header-right a:hover {
-  background-color: #1f5c8b;
-}
-
-header h1 {
-  margin: 0;
-}
-
-header button {
-  background-color: #c0392b;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
 main {
-  max-width: 750px;
-  margin: 50px auto;
-  padding: 25px;
-  background-color: #f1f1f1;
-  border-radius: 10px;
+    max-width: 700px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+form input, form select, form textarea, form button {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-family: "Comic Sans MS", sans-serif;
 }
-
-input, textarea {
-  font-family: "Comic Sans MS", sans-serif;
-  padding: 12px;
-  border-radius: 6px;
-  border: 1px solid #bbb;
+form button {
+    background: #3498db;
+    color: white;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
 }
-
-button[type="submit"] {
-  font-family: "Comic Sans MS", sans-serif;
-  background-color: #4cafaa;
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 6px;
-  cursor: pointer;
+form button:hover {
+    background: #2980b9;
 }
-
-input[type="file"] {
-  background: #fff;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #bbb;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
 </style>
+</head>
 <body>
 <header>
-  <h1>Printing Request</h1>
-       <div class="header-right">
-    <a href="index.html"> <span class="material-symbols-outlined">
-home
-</span></a>
-  <button onclick="goBack()">Back to Dashboard</button>
+    <h1>Printing Service Request</h1>
 </header>
 
 <main>
-  <form id="printingForm">
+<form id="serviceForm" data-service="Printing">
     <input type="text" id="documentName" placeholder="Document Name" required>
     <input type="number" id="numPages" placeholder="Number of Pages" required>
     <label for="colorOption">Color Option:</label>
     <select id="colorOption" required>
-      <option value="Black & White">Black & White</option>
-      <option value="Color">Color</option>
+        <option value="Black & White">Black & White</option>
+        <option value="Color">Color</option>
     </select>
-    <label for="deliveryOption">Receive Method:</label>
-    <select id="deliveryOption" name="deliveryOption" required>
-      <option value="Deliver">Delivery</option>
-      <option value="Collect">Collection</option>
-    </select>
-     <label for="cvFile">Upload Your CV Document (PDF, DOCX):</label>
-    <input type="file" id="cvFile" name="cvFile" accept=".pdf,.doc,.docx" required>
+    <label for="cvFile">Upload Your Document:</label>
+    <input type="file" id="cvFile" accept=".pdf,.doc,.docx" required>
     <textarea id="instructions" placeholder="Additional Instructions"></textarea>
+    <label for="receivingMethod">Receiving Method:</label>
+    <select id="receivingMethod" required>
+        <option value="Online">Online</option>
+        <option value="Delivery">Delivery</option>
+    </select>
+    <input type="text" id="contact" placeholder="Your Contact" required>
     <button type="submit">Submit Printing Request</button>
-  </form>
+</form>
 </main>
 
 <script>
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  if (!currentUser) {
-      alert("Please log in first.");
-      window.location.href = "login.html";
-  }
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+if (!currentUser) {
+    alert("Please log in first.");
+    window.location.href = "customerLogin.html";
+}
 
-  function logout() {
-      localStorage.removeItem("currentUser");
-      window.location.href = "login.html";
-  }
+document.getElementById("serviceForm").addEventListener("submit", function(e) {
+    e.preventDefault();
 
-  
-    function goBack() {
-    window.location.href = "dashboard.html";
-  }
+    const fileInput = document.getElementById("cvFile");
+    const file = fileInput.files[0];
 
-  const printingForm = document.getElementById("printingForm");
-  printingForm.addEventListener("submit", function(e){
-      e.preventDefault();
-
-      const fileInput = document.getElementById("cvFile");
-      const file = fileInput.files[0];
-
-       if (file) {
+    if (file) {
         const reader = new FileReader();
         reader.onload = function(event) {
-            const fileContent = event.target.result;  //Base64 file data
+            const fileContent = event.target.result;
 
-      const printingRequest = {
-          user: currentUser.username,
-          service: "Printing",
-          documentName: document.getElementById("documentName").value,
-          numPages: document.getElementById("numPages").value,
-          colorOption: document.getElementById("colorOption").value,
-          instructions: document.getElementById("instructions").value,
-          deliveryOption: document.getElementById("deliveryOption").value,
-          fileData: fileContent, //Store Base64 content
-          fileNmae: file.name,
-          requestedAt: new Date().toLocaleString()
-      };
+            const printingRequest = {
+                username: currentUser.username,
+                service: "Printing",
+                documentName: document.getElementById("documentName").value,
+                numPages: document.getElementById("numPages").value,
+                colorOption: document.getElementById("colorOption").value,
+                instructions: document.getElementById("instructions").value,
+                cvFileName: file.name,
+                cvFileData: fileContent,
+                receivingMethod: document.getElementById("receivingMethod").value,
+                contact: document.getElementById("contact").value,
+                requestedAt: new Date().toLocaleString()
+            };
 
-      let serviceRequests = JSON.parse(localStorage.getItem("serviceRequests")) || [];
-      serviceRequests.push(printingRequest);
-      localStorage.setItem("serviceRequests", JSON.stringify(serviceRequests));
+            let serviceRequests = JSON.parse(localStorage.getItem("serviceRequests")) || [];
+            serviceRequests.push(printingRequest);
+            localStorage.setItem("serviceRequests", JSON.stringify(serviceRequests));
 
-      alert("✅ Your Printing request has been submitted!");
-      window.location.href = "dashboard.html";
-  };
-
-     reader.readAsDataURL(file); // Convert file to Base64
+            alert("✅ Your Printing request has been submitted!");
+            window.location.href = "dashboard.html";
+        };
+        reader.readAsDataURL(file);
     } else {
         alert("Please upload a document.");
     }
-
-    // window.location.href = "payment.html";
-    //A database to store what the user request of
-  });
+});
 </script>
-
 </body>
 </html>
+

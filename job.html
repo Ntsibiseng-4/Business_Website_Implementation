@@ -1,71 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Job Search Support Service</title>
-</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Application Assistance</title>
 <style>
-    body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  background-color: #ffffff;
+body {
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+    margin: 0;
+    padding: 0;
 }
 
 header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #3498db;
-  padding: 15px 30px;
-  color: white;
-}
-
-header h1 {
-  margin: 0;
-}
-
-header button {
-  background-color: #c0392b;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  color: white;
+    background: #3498db;
+    color: white;
+    padding: 15px;
+    text-align: center;
 }
 
 main {
-  max-width: 700px;
-  margin: 100px auto;
-  padding: 25px;
-  background-color: #f1f1f1;
-  border-radius: 10px;
-  text-align: center;
+    max-width: 700px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-p {
-  font-size: 18px;
+form input,
+form select,
+form textarea,
+form button {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+     font-family: "Comic Sans MS", sans-serif;
 }
 
+form button {
+    background: #3498db;
+    color: white;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+form button:hover {
+    background: #2980b9;
+}
 </style>
+</head>
 <body>
+
 <header>
-  <h1>Job Search Support</h1>
-  <button onclick="goBack()">Back to Dashboard</button>
+    <h1>Job Application Assistance Request</h1>
 </header>
 
 <main>
-  <p style="text-align:center; font-size:18px; margin-top:50px;">
-    🚧 Sorry! The Job Search Support service is not available yet. We are working to make it available soon. Stay tuned!
-  </p>
+<form id="serviceForm" data-service="Job Application Assistance">
+    <input type="text" id="fullName" placeholder="Full Name" required>
+    <input type="text" id="jobTitle" placeholder="Job Title of Interest" required>
+    <input type="text" id="industry" placeholder="Industry" required>
+
+    <label for="cvFile">Upload CV / Supporting Documents:</label>
+    <input type="file" id="cvFile" accept=".pdf,.doc,.docx">
+
+    <label for="instructions">Additional Instructions:</label>
+    <textarea id="instructions" placeholder="Additional Instructions"></textarea>
+
+    <label for="receivingMethod">Receiving Method:</label>
+    <select id="receivingMethod" required>
+        <option value="Online">Online</option>
+        <option value="Contact">Contact</option>
+    </select>
+
+    <input type="text" id="contact" placeholder="Your Contact" required>
+    <button type="submit">Submit Job Application Request</button>
+</form>
 </main>
 
 <script>
-  // Function to go back to dashboard
-  function goBack() {
-    window.location.href = "dashboard.html";
-  }
-</script>
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+if (!currentUser) {
+    alert("Please log in first.");
+    window.location.href = "customerLogin.html";
+}
 
+document.getElementById("serviceForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const fileInput = document.getElementById("cvFile");
+    const file = fileInput.files[0];
+
+    let fileContent = null;
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            fileContent = event.target.result;
+            saveRequest(fileContent);
+        };
+        reader.readAsDataURL(file);
+    } else {
+        saveRequest(fileContent);
+    }
+
+    function saveRequest(fileContent) {
+        const jobRequest = {
+            username: currentUser.username,
+            service: "Job Application Assistance",
+            fullName: document.getElementById("fullName").value,
+            jobTitle: document.getElementById("jobTitle").value,
+            industry: document.getElementById("industry").value,
+            documentName: file ? file.name : null,
+            documentData: fileContent,
+            instructions: document.getElementById("instructions").value,
+            receivingMethod: document.getElementById("receivingMethod").value,
+            contact: document.getElementById("contact").value,
+            requestedAt: new Date().toLocaleString()
+        };
+
+        let serviceRequests = JSON.parse(localStorage.getItem("serviceRequests")) || [];
+        serviceRequests.push(jobRequest);
+        localStorage.setItem("serviceRequests", JSON.stringify(serviceRequests));
+
+        alert("✅ Your Job Application request has been submitted!");
+        window.location.href = "dashboard.html";
+    }
+});
+</script>
 </body>
 </html>

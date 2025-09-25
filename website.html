@@ -1,68 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Website Development Service</title>
-  <link rel="stylesheet" href="dashboard.css">
-</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Website Assistance</title>
 <style>
-  body {
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-  background-color: #ffffff;
+body {
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+    margin: 0;
+    padding: 0;
 }
 
 header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #3498db;
-  padding: 15px 30px;
-  color: white;
-}
-
-header h1 {
-  margin: 0;
-}
-
-header button {
-  background-color: #c0392b;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  color: white;
+    background: #3498db;
+    color: white;
+    padding: 15px;
+    text-align: center;
 }
 
 main {
-  max-width: 800px;
-  margin: 50px auto;
-  padding: 25px;
-  background-color: #f1f1f1;
-  border-radius: 10px;
-  text-align: center;
+    max-width: 700px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
+form input,
+form select,
+form textarea,
+form button {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-family: "Comic Sans MS", sans-serif;
+}
 
+form button {
+    background: #3498db;
+    color: white;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+form button:hover {
+    background: #2980b9;
+}
 </style>
+</head>
 <body>
+
 <header>
-  <h1>Website Development Service</h1>
-  <button onclick="goBack()">Back to Dashboard</button>
+    <h1>Website Assistance Request</h1>
 </header>
 
 <main>
-  <p style="text-align:center; font-size:18px; margin-top:50px;">
-    🚧 Sorry! The Website Development service is not available yet. We are working to make it available soon. Stay tuned!
-  </p>
+<form id="serviceForm" data-service="Website Assistance">
+    <input type="text" id="websiteName" placeholder="Website Name" required>
+    <input type="text" id="websiteType" placeholder="Type of Website (Portfolio, E-commerce, etc.)" required>
+    <textarea id="designPref" placeholder="Design Preferences" required></textarea>
+    
+    <label for="cvFile">Upload Any Reference Document:</label>
+    <input type="file" id="cvFile" accept=".pdf,.doc,.docx,.zip">
+    
+    <label for="receivingMethod">Receiving Method:</label>
+    <select id="receivingMethod" required>
+        <option value="Online">Online</option>
+        <option value="Contact">Contact</option>
+    </select>
+    
+    <input type="text" id="contact" placeholder="Your Contact" required>
+    <button type="submit">Submit Website Assistance Request</button>
+</form>
 </main>
 
 <script>
-  function goBack() {
-    window.location.href = "dashboard.html";
-  }
-</script>
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+if (!currentUser) {
+    alert("Please log in first.");
+    window.location.href = "customerLogin.html";
+}
 
+document.getElementById("serviceForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const fileInput = document.getElementById("cvFile");
+    const file = fileInput.files[0];
+
+    let fileContent = null;
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            fileContent = event.target.result;
+            saveRequest(fileContent);
+        };
+        reader.readAsDataURL(file);
+    } else {
+        saveRequest(fileContent);
+    }
+
+    function saveRequest(fileContent) {
+        const websiteRequest = {
+            username: currentUser.username,
+            service: "Website Assistance",
+            businessName: document.getElementById("websiteName").value,
+            websiteType: document.getElementById("websiteType").value,
+            designPref: document.getElementById("designPref").value,
+            documentName: file ? file.name : null,
+            documentData: fileContent,
+            receivingMethod: document.getElementById("receivingMethod").value,
+            contact: document.getElementById("contact").value,
+            requestedAt: new Date().toLocaleString()
+        };
+
+        let serviceRequests = JSON.parse(localStorage.getItem("serviceRequests")) || [];
+        serviceRequests.push(websiteRequest);
+        localStorage.setItem("serviceRequests", JSON.stringify(serviceRequests));
+
+        alert("✅ Your Website Assistance request has been submitted!");
+        window.location.href = "dashboard.html";
+    }
+});
+</script>
 </body>
 </html>

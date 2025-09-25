@@ -3,7 +3,7 @@ const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
 if (!currentUser) {
   // If no one is logged in, redirect to login
-  window.location.href = "login.html";
+  window.location.href = "CustomerLogin.html";
 }
 
 // Display username
@@ -12,7 +12,7 @@ document.getElementById("usernameDisplay").textContent = currentUser.username;
 // Logout
 document.getElementById("logoutBtn").addEventListener("click", () => {
   localStorage.removeItem("currentUser");
-  window.location.href = "login.html";
+  window.location.href = "customerLogin.html";
 });
 
 // Handle service requests

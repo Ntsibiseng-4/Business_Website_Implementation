@@ -1,130 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CV Request</title>
-  <link rel="stylesheet" href="dashboard.css">
-</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV Poster Service</title>
 <style>
-   body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  background-color: #ffffff;
+body {
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+    margin: 0;
+    padding: 0;
 }
 
 header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #3498db;
-  padding: 15px 30px;
-  color: white;
-}
-
-header h1 {
-  margin: 0;
-}
-
-header button {
-  background-color: #e74c3c;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
-  cursor: pointer;
+    background: #3498db;
+    color: white;
+    padding: 15px;
+    text-align: center;
 }
 
 main {
-  max-width: 700px;
-  margin: 50px auto;
-  padding: 20px;
-  background-color: #f1f1f1;
-  border-radius: 10px;
+    max-width: 700px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+form input,
+form select,
+form textarea,
+form button {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-family: "Comic Sans MS", sans-serif;
 }
 
-input, textarea {
-  font-family: "Comic Sans MS", sans-serif;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+form button {
+    background: #3498db;
+    color: white;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
 }
 
-button[type="submit"] {
-  font-family: "Comic Sans MS", sans-serif;
-  background-color: #4cafaa;
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 6px;
-  cursor: pointer;
+form button:hover {
+    background: #2980b9;
 }
-
-button:hover {
-    background-color: #45a049;
-}
- 
 </style>
+</head>
 <body>
+
 <header>
-  <h1>CV Request</h1>
-  <button onclick="logout()">Logout</button>
+    <h1>CV Poster Request</h1>
 </header>
 
 <main>
-  <form id="cvForm">
+<form id="serviceForm" data-service="CV Poster">
     <input type="text" id="fullName" placeholder="Full Name" required>
-    <input type="text" id="email" placeholder="Email" required>
+    <input type="email" id="email" placeholder="Email" required>
     <input type="text" id="phone" placeholder="Phone Number" required>
-    <input type="text" id="education" placeholder="Highest Education" required>
-    <textarea id="experience" placeholder="Work Experience" required></textarea>
+    <textarea id="education" placeholder="Education Details" required></textarea>
+    <textarea id="experience" placeholder="Experience Details" required></textarea>
     <textarea id="skills" placeholder="Skills" required></textarea>
-    <button type="submit">Submit CV Request</button>
-  </form>
+    
+    <label for="cvFile">Upload Your CV Document:</label>
+    <input type="file" id="cvFile" accept=".pdf,.doc,.docx" required>
+    
+    <label for="receivingMethod">Receiving Method:</label>
+    <select id="receivingMethod" required>
+        <option value="Online">Online</option>
+        <option value="Contact">Contact</option>
+    </select>
+    
+    <input type="text" id="contact" placeholder="Your Contact" required>
+    <button type="submit">Submit CV Poster Request</button>
+</form>
 </main>
 
 <script>
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  if (!currentUser) {
-      alert("Please log in first.");
-      window.location.href = "login.html";
-  }
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+if (!currentUser) {
+    alert("Please log in first.");
+    window.location.href = "customerLogin.html";
+}
 
-  function logout() {
-      localStorage.removeItem("currentUser");
-      window.location.href = "login.html";
-  }
+document.getElementById("serviceForm").addEventListener("submit", function(e) {
+    e.preventDefault();
 
-  const cvForm = document.getElementById("cvForm");
-  cvForm.addEventListener("submit", function(e){
-      e.preventDefault();
+    const fileInput = document.getElementById("cvFile");
+    const file = fileInput.files[0];
 
-      const cvRequest = {
-          user: currentUser.username,
-          service: "CV Poster",
-          fullName: document.getElementById("fullName").value,
-          email: document.getElementById("email").value,
-          phone: document.getElementById("phone").value,
-          education: document.getElementById("education").value,
-          experience: document.getElementById("experience").value,
-          skills: document.getElementById("skills").value,
-          requestedAt: new Date().toLocaleString()
-      };
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const fileContent = event.target.result;
 
-      let serviceRequests = JSON.parse(localStorage.getItem("serviceRequests")) || [];
-      serviceRequests.push(cvRequest);
-      localStorage.setItem("serviceRequests", JSON.stringify(serviceRequests));
+            const cvRequest = {
+                username: currentUser.username,
+                service: "CV Poster",
+                fullName: document.getElementById("fullName").value,
+                email: document.getElementById("email").value,
+                phone: document.getElementById("phone").value,
+                education: document.getElementById("education").value,
+                experience: document.getElementById("experience").value,
+                skills: document.getElementById("skills").value,
+                cvFileName: file.name,
+                cvFileData: fileContent,
+                receivingMethod: document.getElementById("receivingMethod").value,
+                contact: document.getElementById("contact").value,
+                requestedAt: new Date().toLocaleString()
+            };
 
-      alert("✅ Your CV request has been submitted!");
-      window.location.href = "dashboard.html";
-  });
+            let serviceRequests = JSON.parse(localStorage.getItem("serviceRequests")) || [];
+            serviceRequests.push(cvRequest);
+            localStorage.setItem("serviceRequests", JSON.stringify(serviceRequests));
+
+            alert("✅ Your CV Poster request has been submitted!");
+            window.location.href = "dashboard.html";
+        };
+        reader.readAsDataURL(file);
+    } else {
+        alert("Please upload your CV document.");
+    }
+});
 </script>
-
 </body>
 </html>
