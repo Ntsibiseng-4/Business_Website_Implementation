@@ -2,7 +2,6 @@
 const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
 if (!currentUser) {
-  // If no one is logged in, redirect to login
   window.location.href = "CustomerLogin.html";
 }
 

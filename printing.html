@@ -57,6 +57,7 @@ form button:hover {
     <input type="number" id="numPages" placeholder="Number of Pages" required>
     <label for="colorOption">Color Option:</label>
     <select id="colorOption" required>
+        <option value="">-- Select --</option>
         <option value="Black & White">Black & White</option>
         <option value="Color">Color</option>
     </select>
@@ -65,10 +66,11 @@ form button:hover {
     <textarea id="instructions" placeholder="Additional Instructions"></textarea>
     <label for="receivingMethod">Receiving Method:</label>
     <select id="receivingMethod" required>
-        <option value="Online">Online</option>
+        <option value="">-- Select --</option>
+        <option value="Online">Collect</option>
         <option value="Delivery">Delivery</option>
     </select>
-    <input type="text" id="contact" placeholder="Your Contact" required>
+    <input type="text" id="contact" placeholder="Your Contact number" required>
     <button type="submit">Submit Printing Request</button>
 </form>
 </main>
@@ -110,7 +112,7 @@ document.getElementById("serviceForm").addEventListener("submit", function(e) {
             localStorage.setItem("serviceRequests", JSON.stringify(serviceRequests));
 
             alert("✅ Your Printing request has been submitted!");
-            window.location.href = "dashboard.html";
+            window.location.href = "payment.html";
         };
         reader.readAsDataURL(file);
     } else {

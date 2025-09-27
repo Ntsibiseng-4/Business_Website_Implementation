@@ -18,31 +18,50 @@ let serviceRequests = JSON.parse(localStorage.getItem("serviceRequests")) || [];
 
 function getRequestDetails(req) {
   switch (req.service) {
-    case "CV Poster":
-      return `Full Name: ${req.fullName || "-"}, Email: ${
-        req.email || "-"
-      }, Education: ${req.education || "-"}, Experience: ${
-        req.experience || "-"
-      }, Skills: ${req.skills || "-"}`;
     case "Printing":
-      return `Document: ${req.documentName || "-"}, Pages: ${
-        req.numPages || "-"
-      }, Color: ${req.colorOption || "-"}, Notes: ${req.instructions || "-"}`;
+      return `
+        <strong>Color:</strong> ${req.colorOption || "-"}<br>
+        <strong>Pages:</strong> ${req.numberOfPages || "-"}<br>
+        <strong>Document Name:</strong> ${req.documentName || "-"}
+      `;
+    case "CV Poster":
+      return `
+        <strong>Full Name:</strong> ${req.fullName || "-"}<br>
+        <strong>Education:</strong> ${req.education || "-"}<br>
+        <strong>Degree:</strong> ${req.degree || "-"}<br>
+        <strong>Skills:</strong> ${req.skills || "-"}
+      `;
     case "Website Assistance":
-      return `Business: ${req.businessName || "-"}, Type: ${
-        req.websiteType || "-"
-      }, Design Pref: ${req.designPref || "-"}, Contact: ${req.contact || "-"}`;
-    case "University Applications":
-      return `Course: ${req.course || "-"}, Institution: ${
-        req.institution || "-"
-      }, Requirements: ${req.requirements || "-"}`;
-    case "Job Search Support":
-      return `Field: ${req.jobField || "-"}, Location: ${
-        req.location || "-"
-      }, Resume: ${req.resume || "-"}`;
+      return `
+        <strong>Website Name:</strong> ${req.websiteName || "-"}<br>
+        <strong>Type of Website:</strong> ${req.websiteType || "-"}<br>
+        <strong>Design Preference:</strong> ${req.designPref || "-"}
+      `;
+    case "Application":
+      return `
+        <strong>Name:</strong> ${req.fullName || "-"}<br>
+        <strong>Degree:</strong> ${req.degree || "-"}<br>
+        <strong>University:</strong> ${req.university || "-"}<br>
+        <strong>Instructions:</strong> ${req.instructions || "-"}
+      `;
+    case "Job":
+      return `
+        <strong>Name:</strong> ${req.fullName || "-"}<br>
+        <strong>Job Title:</strong> ${req.jobTitle || "-"}<br>
+        <strong>Industry:</strong> ${req.industry || "-"}<br>
+        <strong>Instructions:</strong> ${req.instructions || "-"}
+      `;
     default:
-      return "-";
+      return `
+        <strong>Document Name:</strong> ${req.documentName || "-"}<br>
+        <strong>Instructions:</strong> ${req.instructions || "-"}
+      `;
   }
+}
+
+function formatDate(dateString) {
+  // Assumes dateString is in "YYYY-MM-DD HH:mm" or similar
+  return dateString.split(" ")[0];
 }
 
 function loadRequests(filter = "all") {
@@ -54,41 +73,52 @@ function loadRequests(filter = "all") {
   }
 
   if (filteredRequests.length === 0) {
-    tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center;">No requests found.</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="8" style="text-align:center;">No requests found.</td></tr>`;
     return;
   }
 
   filteredRequests.forEach((req, index) => {
-    const row = document.createElement("tr");
+    let docBtn = "No document";
+    if (req.documentData && req.documentName) {
+      docBtn = `<button class="download-btn" data-index="${index}">Download</button>`;
+    }
 
+    const details = getRequestDetails(req);
+
+    const row = document.createElement("tr");
     row.innerHTML = `
-      <td>${req.user || "-"}</td>
-      <td>${req.service || "-"}</td>
       <td>${
-        req.cvFile
-          ? `<button class="download-btn" data-index="${index}">Download</button>`
-          : "No document"
+        req.user && req.user.trim()
+          ? req.user
+          : req.username && req.username.trim()
+          ? req.username
+          : "-"
       }</td>
+      <td>${req.service || "-"}</td>
+      <td>${docBtn}</td>
       <td>${req.requestedAt || "-"}</td>
-      <td>${getRequestDetails(req)}</td>
+      <td>${details}</td>
       <td>${req.contact || "-"}</td>
       <td>${req.receivingMethod || "-"}</td>
+      <td>${req.paymentMethod || "-"}</td>
     `;
-
     tableBody.appendChild(row);
   });
 
-  // Add download functionality
+  // Download handler
   document.querySelectorAll(".download-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       const idx = e.target.getAttribute("data-index");
-      const fileData = serviceRequests[idx].cvFile;
-
-      if (fileData) {
+      const req = filteredRequests[idx];
+      if (req && req.documentData && req.documentName) {
         const a = document.createElement("a");
-        a.href = fileData;
-        a.download = `${serviceRequests[idx].documentName || "document"}`;
+        a.href = req.documentData;
+        a.download = req.documentName;
+        document.body.appendChild(a);
         a.click();
+        document.body.removeChild(a);
+      } else {
+        alert("⚠️ No file found for this request.");
       }
     });
   });

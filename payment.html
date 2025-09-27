@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Service Payment</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f9f9f9;
+        margin: 0;
+        padding: 0;
+      }
+
+      header {
+        background: #3498db;
+        color: white;
+        padding: 15px;
+        text-align: center;
+      }
+
+      main {
+        max-width: 600px;
+        margin: 30px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      label {
+        font-weight: bold;
+        display: block;
+        margin-top: 15px;
+      }
+
+      input,
+      select,
+      button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-family: "Comic Sans MS", sans-serif;
+      }
+
+      button {
+        background: #3498db;
+        color: white;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+
+      button:hover {
+        background: #2980b9;
+      }
+
+      .summary-box {
+        background: #f1f1f1;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Payment Page</h1>
+    </header>
+
+    <main>
+      <h2>Complete Your Payment</h2>
+
+      <div class="summary-box" id="orderSummary">
+        <!-- Order summary will load here -->
+      </div>
+
+      <form id="paymentForm">
+        <label for="paymentMethod">Select Payment Method:</label>
+        <select id="paymentMethod" required>
+          <option value="">-- Select --</option>
+          <option value="Card">💳 Card Payment</option>
+          <option value="EFT">🏦 Bank Transfer (EFT)</option>
+          <option value="Cash">💵 Cash on Collection/Delivery</option>
+        </select>
+
+        <label for="transactionRef">Transaction Reference (if any):</label>
+        <input
+          type="text"
+          id="transactionRef"
+          placeholder="Enter transaction reference"
+        />
+
+        <button type="submit">Confirm Payment</button>
+      </form>
+    </main>
+
+    <script>
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      if (!currentUser) {
+        alert("Please log in first.");
+        window.location.href = "customerLogin.html";
+      }
+
+      // Get the last submitted request
+      let serviceRequests =
+        JSON.parse(localStorage.getItem("serviceRequests")) || [];
+      let lastRequest = serviceRequests[serviceRequests.length - 1];
+
+      const summaryDiv = document.getElementById("orderSummary");
+      if (lastRequest) {
+        summaryDiv.innerHTML = `
+        <h3>Order Summary</h3>
+        <p><strong>User:</strong> ${lastRequest.username}</p>
+        <p><strong>Service:</strong> ${lastRequest.service}</p>
+        <p><strong>Requested At:</strong> ${lastRequest.requestedAt}</p>
+        <p><strong>Contact:</strong> ${lastRequest.contact || "-"}</p>
+    `;
+      } else {
+        summaryDiv.innerHTML = "<p>No recent request found.</p>";
+      }
+
+      const paymentForm = document.getElementById("paymentForm");
+      paymentForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const paymentMethod = document.getElementById("paymentMethod").value;
+        // ...other payment details...
+
+        // Save payment details
+        const paymentDetails = {
+          user: currentUser.username,
+          service: lastRequest ? lastRequest.service : "Unknown",
+          paymentMethod: paymentMethod,
+          paidAt: new Date().toLocaleString(),
+        };
+
+        let payments = JSON.parse(localStorage.getItem("payments")) || [];
+        payments.push(paymentDetails);
+        localStorage.setItem("payments", JSON.stringify(payments));
+
+        // Update last service request with payment method
+        if (lastRequest) {
+          lastRequest.paymentMethod = paymentMethod;
+          serviceRequests[serviceRequests.length - 1] = lastRequest;
+          localStorage.setItem(
+            "serviceRequests",
+            JSON.stringify(serviceRequests)
+          );
+        }
+
+        alert("✅ Payment recorded successfully!");
+        window.location.href = "final.html";
+      });
+    </script>
+  </body>
+</html>

@@ -75,11 +75,12 @@ form button:hover {
     
     <label for="receivingMethod">Receiving Method:</label>
     <select id="receivingMethod" required>
-        <option value="Online">Online</option>
-        <option value="Contact">Contact</option>
+        <option value="">-- Select --</option>
+        <option value="Online">Online&Delivery</option>
+        <option value="Contact">Contact&Collect</option>
     </select>
     
-    <input type="text" id="contact" placeholder="Your Contact" required>
+    <input type="text" id="contact" placeholder="Your Contact number">
     <button type="submit">Submit CV Poster Request</button>
 </form>
 </main>
@@ -123,7 +124,7 @@ document.getElementById("serviceForm").addEventListener("submit", function(e) {
             localStorage.setItem("serviceRequests", JSON.stringify(serviceRequests));
 
             alert("✅ Your CV Poster request has been submitted!");
-            window.location.href = "dashboard.html";
+            window.location.href = "payment.html";
         };
         reader.readAsDataURL(file);
     } else {

@@ -75,11 +75,12 @@ form button:hover {
 
     <label for="receivingMethod">Receiving Method:</label>
     <select id="receivingMethod" required>
+        <option value="">-- Select --</option>
         <option value="Online">Online</option>
         <option value="Contact">Contact</option>
     </select>
 
-    <input type="text" id="contact" placeholder="Your Contact" required>
+    <input type="text" id="contact" placeholder="Your Contact number">
     <button type="submit">Submit Job Application Request</button>
 </form>
 </main>
@@ -129,7 +130,7 @@ document.getElementById("serviceForm").addEventListener("submit", function(e) {
         localStorage.setItem("serviceRequests", JSON.stringify(serviceRequests));
 
         alert("✅ Your Job Application request has been submitted!");
-        window.location.href = "dashboard.html";
+        window.location.href = "payment.html";
     }
 });
 </script>

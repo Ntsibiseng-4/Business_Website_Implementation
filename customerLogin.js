@@ -14,7 +14,7 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
 
   if (user) {
     localStorage.setItem("currentUser", JSON.stringify(user));
-    window.location.href = "dashboard.html";
+    window.location.href = "Customerdashboard.html";
   } else {
     errorMsg.textContent = "❌ Invalid username or password!";
     errorMsg.style.display = "block";

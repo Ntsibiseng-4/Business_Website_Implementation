@@ -45,5 +45,5 @@ document.getElementById("signupForm").addEventListener("submit", function (e) {
   alert("✅ Signup successful! You can now login.");
 
   // 6. Redirect to login page
-  window.location.href = "login.html";
+  window.location.href = "customerLogin.html";
 });

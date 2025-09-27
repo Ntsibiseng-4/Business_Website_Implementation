@@ -76,7 +76,7 @@ form button:hover {
         <option value="Contact">Contact</option>
     </select>
     
-    <input type="text" id="contact" placeholder="Your Contact" required>
+    <input type="text" id="contact" placeholder="Your Contact number" required>
     <button type="submit">Submit Website Assistance Request</button>
 </form>
 </main>
@@ -125,7 +125,7 @@ document.getElementById("serviceForm").addEventListener("submit", function(e) {
         localStorage.setItem("serviceRequests", JSON.stringify(serviceRequests));
 
         alert("✅ Your Website Assistance request has been submitted!");
-        window.location.href = "dashboard.html";
+        window.location.href = "payment.html";
     }
 });
 </script>
